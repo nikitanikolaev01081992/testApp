@@ -12,7 +12,7 @@ export function ImageButton({data, navObj}) {
           source={{uri: data.urls.thumb}}
         />
       </TouchableHighlight>
-      <Text>{data.user.name}</Text>
+      <Text style={styles.text}>{data.user.name}</Text>
     </View>
   );
 }
@@ -20,8 +20,15 @@ export function ImageButton({data, navObj}) {
 const styles = new StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
+    marginBottom: 10,
+    width: 200,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+
+  text: {
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 
   imageSmall: {
