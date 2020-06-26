@@ -1,31 +1,52 @@
-import React, {useEffect, useState} from 'react';
-import {View, FlatList} from 'react-native';
-import {ImageButton} from './image-button';
+import React, { useEffect, useState } from "react";
+import { View, FlatList, Text } from "react-native";
+
+import { connect } from "react-redux";
+import { getDataFromApi, setScreenData } from "../actions/actions";
+
+import ImageButton from "./image-button";
 
 const urlToApi =
-  'https://api.unsplash.com/photos/?client_id=cf49c08b444ff4cb9e4d126b7e9f7513ba1ee58de7906e4360afc1a33d1bf4c0';
-function getImagesApi(url, setData) {
-  return fetch(url)
-    .then(response => response.json())
-    .then(json => {
-      return setData(json);
-    })
-    .catch(error => {
-      console.error(error);
-    });
+    "https://api.unsplash.com/photos/?client_id=cf49c08b444ff4cb9e4d126b7e9f7513ba1ee58de7906e4360afc1a33d1bf4c0";
+
+function ListOfImages({ data, navigation, setCurrentScreenData, getDataFromApi }) {
+    setCurrentScreenData("screen 1", navigation);
+
+    if (data.length == 0) {
+        getDataFromApi();
+        return (
+            <View>
+                <Text>Loading...</Text>
+            </View>
+        );
+    }
+
+    return (
+        <View>
+            <FlatList
+                data={data}
+                keyExtractor={({ id }, index) => id}
+                renderItem={({ item }) => <ImageButton id={item.id} />}
+            />
+        </View>
+    );
 }
 
-export function ListOfImages({navigation}) {
-  const [data, setData] = useState([]);
-  getImagesApi(urlToApi, setData);
+const mapStateToProps = (state, ownProps) => {
+    return {
+        data: state.dataState,
+        navigation: ownProps.navigation,
+    };
+};
 
-  return (
-    <View>
-      <FlatList
-        data={data}
-        keyExtractor={({id}, index) => id}
-        renderItem={({item}) => <ImageButton data={item} navObj={navigation} />}
-      />
-    </View>
-  );
-}
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getDataFromApi: () => dispatch(getDataFromApi()),
+        setCurrentScreenData: (screen, navigation) => dispatch(setScreenData(screen, navigation)),
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ListOfImages);
