@@ -41,7 +41,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getDataFromApi: () => dispatch(getDataFromApi()),
+        getDataFromApi: () => dispatch(getDataFromApi(urlToApi)),
         setCurrentScreenData: (screen, navigation) => dispatch(setScreenData(screen, navigation)),
     };
 };
